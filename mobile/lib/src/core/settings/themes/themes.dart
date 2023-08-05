@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../constants.dart';
 
 class Themes {
   static final lightTheme = ThemeData.light()
@@ -8,13 +9,14 @@ class Themes {
   static final darkTheme = ThemeData(
     appBarTheme: const AppBarTheme(
       color: Colors.transparent,
-      titleTextStyle: TextStyle(color: Color(0xFF007605), fontSize: 55),
+      titleTextStyle: TextStyle(color: kButtonColor, fontSize: 55),
       elevation: 0,
     ),
     scaffoldBackgroundColor: const Color(0xFF7CE26B),
     colorScheme: const ColorScheme.dark().copyWith(
       primary: const Color(0xFF7CE26B),
     ),
+    textSelectionTheme: TextSelectionThemeData(cursorColor: kButtonColor),
     // textTheme: const TextTheme(
     //   headline1: TextStyle(
     //     color: Colors.black,
@@ -34,7 +36,7 @@ class Themes {
       focusColor: Colors.green,
       enabledBorder: UnderlineInputBorder(
         borderSide: BorderSide(
-          color: Color(0xFF007605),
+          color: kButtonColor,
           width: 4,
         ),
       ),
@@ -45,7 +47,7 @@ class Themes {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFF007605),
+        backgroundColor: kButtonColor,
         foregroundColor: Colors.black,
         fixedSize: Size(Get.width / 2, Get.height / 20),
       ),

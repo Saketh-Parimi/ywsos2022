@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:mobile/src/core/constants.dart';
 import 'package:mobile/src/core/widgets/custom_app_bar.dart';
 import 'package:mobile/src/features/auth_feature/auth_controller.dart';
-import 'package:mobile/src/features/auth_feature/register_view.dart';
 
 import '../../core/widgets/loading_indicator.dart';
 
@@ -15,22 +14,22 @@ class LoginView extends GetView<AuthController> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: const CustomAppBar(title: ''),
-      body: controller.obx(
-        (_) => Center(
-          child: SingleChildScrollView(
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(.2),
-                borderRadius: BorderRadius.circular(13),
-              ),
-              height: Get.height / 1.5,
-              width: Get.width / 1.2,
-              padding: const EdgeInsets.all(20),
-              child: Column(
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(.2),
+              borderRadius: BorderRadius.circular(13),
+            ),
+            height: Get.height / 1.5,
+            width: Get.width / 1.2,
+            padding: const EdgeInsets.all(20),
+            child: Obx(
+              () => Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Sign In',
+                    controller.isRegister.isTrue ? 'Sign Up' : 'Sign In',
                     style: Get.textTheme.displayMedium,
                   ),
                   Column(
@@ -70,13 +69,19 @@ class LoginView extends GetView<AuthController> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          controller.loginUser(
-                              controller.usernameTextController.text,
-                              controller.passwordTextController.text);
+                          controller.isRegister.isTrue
+                              ? controller.registerUser(
+                                  controller.usernameTextController.text,
+                                  controller.passwordTextController.text)
+                              : controller.loginUser(
+                                  controller.usernameTextController.text,
+                                  controller.passwordTextController.text);
                           controller.obx(
-                            (_) => const GetSnackBar(
+                            (_) => GetSnackBar(
                               messageText: Text(
-                                "Successfully logged in",
+                                controller.isRegister.isTrue
+                                    ? "Successfully Registered"
+                                    : "Successfully logged in",
                                 style: TextStyle(color: kButtonColor),
                               ),
                               snackStyle: SnackStyle.FLOATING,
@@ -114,15 +119,19 @@ class LoginView extends GetView<AuthController> {
                   Column(
                     children: [
                       Text(
-                        'New here? Let\'s get you started.',
+                        controller.isRegister.isTrue
+                            ? 'Been here before? Let\'s get you signed in.'
+                            : 'New here? Let\'s get you started.',
                         style: Get.textTheme.bodyLarge,
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          Get.off(() => RegisterView());
+                          controller.isRegister.toggle();
                         },
                         child: Text(
-                          "Click here to register",
+                          controller.isRegister.isTrue
+                              ? "Click here to sign in"
+                              : "Click here to register",
                           style: Get.textTheme.bodyLarge,
                         ),
                       )
@@ -133,8 +142,8 @@ class LoginView extends GetView<AuthController> {
             ),
           ),
         ),
-        onLoading: const Center(child: LoadingIndicator()),
       ),
+      // onLoading: const Center(child: LoadingIndicator()),
     );
   }
 }

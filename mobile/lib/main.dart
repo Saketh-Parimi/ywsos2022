@@ -7,9 +7,10 @@ import 'src/app.dart';
 
 void main() async {
   await initServices();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 Future<void> initServices() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
 }

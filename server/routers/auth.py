@@ -84,7 +84,8 @@ def refresh_token(Authorize: AuthJWT = Depends(), user_agent: Union[str, None] =
     we use the get_jwt_subject() function to get the subject of the refresh
     token, and use create_access_token() function again to make a new access token
     """
-    Authorize.jwt_refresh_token_required()
+
+    # Authorize.jwt_refresh_token_required()
     current_user = Authorize.get_jwt_subject()
     access_token = Authorize.create_access_token(subject=current_user)
     return {"access_token": access_token}
@@ -104,12 +105,16 @@ async def register(response: Response, user: UserModel, Authorize: AuthJWT = Dep
                     "created_at": datetime.utcnow(),
                     "key": secret_key
                 })
+                response.status_code = status.HTTP_200_OK
                 return {"status_code":status.HTTP_200_OK, "content":"success", "key":secret_key}
             else:
+                response.status_code = status.HTTP_422_UNPROCESSABLE_ENTITY
                 return {"status_code":status.HTTP_422_UNPROCESSABLE_ENTITY, "status":"failure", "content":"Give your password a special character!"}
         else:
+            response.status_code = status.HTTP_411_LENGTH_REQUIRED
             return {"status_code":status.HTTP_411_LENGTH_REQUIRED, "status":"failure", "content":"Make your username more than three digits!"}
     else:
+        response.status_code = status.HTTP_422_UNPROCESSABLE_ENTITY
         return {"status_code":status.HTTP_422_UNPROCESSABLE_ENTITY, "status":"failure", "content":"Username already taken"}
 
 @router.post("/forgotpass")
